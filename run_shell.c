@@ -1,7 +1,7 @@
 #include <main.h>
 
 /**
- * perform_cmd(void) - gets the command and start performing it
+ * perform_cmd - gets the command and start performing it
  *
  * Return: always 0
  */
@@ -26,26 +26,32 @@ void perform_cmd(void)
 
 	/* let's tokenize the command into args */
 	args = tokenize(line, " \t\n");
-
 	/* check for builtins and perform them */
 	if (cmd_is(args[0], "exit"))
 	exit_flag = true;  /* just mark the exit flag */
 	else if (cmd_is(args[0], "env"))
 	print_env();
-
 	/* we make sure the command exists. if it fails, we stop */
 	else if (!cmd_exists(args[0]))
 	perror(prog_name);
 	/* now, we're sure that the command exists, so we execute it */
 	else
 	execute(args);
-
+	/*check for builtins and perform them*/
+	if (cmd_is(args[0], "exit"))
+		exit_flag = true;
+	else if (cmd_is(args[0], "env"))
+		print_env();
+	else if (!cmd_exists(args[0]))
+		perror(prog_name);
+	else
+		execute(args);
 	free_tokens(args);
 	free(line);
 }
 
 /**
- * execute() - poerforms the cmd using excev
+ * execute - poerforms the cmd using excev
  *@args: the command line arguments
  *
  *Return: always true
@@ -77,3 +83,4 @@ void execute(char **args)
 		wait(&wstatus);
 	}
 }
+

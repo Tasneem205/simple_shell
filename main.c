@@ -35,6 +35,5 @@ int main(int argc, char *argv[], char *envp[])
 	}
 
 	free_tokens(paths);
-	return (EXIT_SUCCESS);
 	return (0);
 }
