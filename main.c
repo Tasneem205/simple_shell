@@ -9,10 +9,10 @@
  * Return: Always 0.
  */
 
-int main(int argc, char *argv[], char *envp[])
+int main(__attribute__((unused)) int argc, char *argv[], char *envp[])
 {
-	program_name = argv[0];
-	environ = envp;
+	prog_name = argv[0];
+	environs = envp;
 	paths = tokenize(_get_env("PATH"), ":");
 	exit_flag = false;
 
@@ -21,7 +21,7 @@ int main(int argc, char *argv[], char *envp[])
 		while (true)
 		{
 			/* display prompt */
-			write(STDOUT_FILENO, "> ", 2);
+			write(STDOUT_FILENO, "($) ", 4);
 			perform_cmd();
 			/* if exit flag was set */
 			if (exit_flag)
@@ -31,7 +31,7 @@ int main(int argc, char *argv[], char *envp[])
 	/* if there is echo or pipe, just perform and finish */
 	else
 	{
-		get_perform_cmd();
+		perform_cmd();
 	}
 
 	free_tokens(paths);

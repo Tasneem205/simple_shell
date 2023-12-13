@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 
 /* main functionality */
 void perform_cmd(void);
@@ -23,14 +26,18 @@ int count_tokens(char *str, char *delim);
 bool is_delim(char c, char *delim);
 void free_tokens(char **tokens);
 
+/* cmd reader */
+bool cmd_is(char *cmd, char *s);
+bool cmd_exists(char *cmd);
+
 /* environs */
 char *_get_env(char *name);
 void print_env(void);
 
 /* globals */
 char *prog_name;
-char *environs[];
-char *paths[];
+char **environs;
+char **paths;
 bool exit_flag;
 
 #endif

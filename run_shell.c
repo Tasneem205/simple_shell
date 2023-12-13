@@ -1,4 +1,4 @@
-#include <main.h>
+#include "main.h"
 
 /**
  * perform_cmd - gets the command and start performing it
@@ -11,7 +11,7 @@ void perform_cmd(void)
 	char *line = NULL;
 	size_t len = 0;
 	int read;
-	char *args[];
+	char **args;
 
 	/* first, we get the command using getline() */
 	read = getline(&line, &len, stdin);
@@ -28,15 +28,15 @@ void perform_cmd(void)
 	args = tokenize(line, " \t\n");
 	/* check for builtins and perform them */
 	if (cmd_is(args[0], "exit"))
-	exit_flag = true;  /* just mark the exit flag */
+		exit_flag = true;  /* just mark the exit flag */
 	else if (cmd_is(args[0], "env"))
-	print_env();
+		print_env();
 	/* we make sure the command exists. if it fails, we stop */
 	else if (!cmd_exists(args[0]))
-	perror(prog_name);
+		perror(prog_name);
 	/* now, we're sure that the command exists, so we execute it */
 	else
-	execute(args);
+		execute(args);
 	/*check for builtins and perform them*/
 	if (cmd_is(args[0], "exit"))
 		exit_flag = true;
@@ -72,7 +72,7 @@ void execute(char **args)
 		/* we're in the child process, so execute */
 		execve(args[0],
 		(char * const *) args,
-		(char * const *) environ);
+		(char * const *) environs);
 		/* if execve returns, there is something wrong */
 		perror(prog_name);
 		exit(EXIT_FAILURE);
