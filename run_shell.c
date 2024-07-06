@@ -23,7 +23,15 @@ void perform_cmd(void)
 		perror(prog_name);
 		return;
 	}
+	/* let's tokenize the command into args */
+	args = tokenize(line, " \t\n");
 
+	/* if no tokens were found, just return */
+	if (args == NULL || args[0] == NULL)
+	{
+		free(line);
+		return;
+	}
 	/* let's tokenize the command into args */
 	args = tokenize(line, " \t\n");
 	/* check for builtins and perform them */
@@ -35,15 +43,6 @@ void perform_cmd(void)
 	else if (!cmd_exists(args[0]))
 		perror(prog_name);
 	/* now, we're sure that the command exists, so we execute it */
-	else
-		execute(args);
-	/*check for builtins and perform them*/
-	if (cmd_is(args[0], "exit"))
-		exit_flag = true;
-	else if (cmd_is(args[0], "env"))
-		print_env();
-	else if (!cmd_exists(args[0]))
-		perror(prog_name);
 	else
 		execute(args);
 	free_tokens(args);
