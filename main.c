@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "main.h"
 
 /**
@@ -6,34 +5,42 @@
  * @argc: arguments count
  * @argv: arguments vector
  * @envp: an optional third parameter to main
+ *
  * Return: Always 0.
  */
 
-int main(__attribute__((unused)) int argc, char *argv[], char *envp[])
+int main(__attribute__((unused)) int argc, char *argv[])
 {
-	prog_name = argv[0];
-	environs = envp;
-	paths = tokenize(_get_env("PATH"), ":");
-	exit_flag = false;
+    info_t info[] = { INFO_INIT };
+    int fd = 2;
 
-	if (isatty(STDIN_FILENO))
-	{
-		while (true)
-		{
-			/* display prompt */
-			write(STDOUT_FILENO, "($) ", 4);
-			perform_cmd();
-			/* if exit flag was set */
-			if (exit_flag)
-				break;
-		}
-	}
-	/* if there is echo or pipe, just perform and finish */
-	else
-	{
-		perform_cmd();
-	}
+    asm ("mov %1, %0\n\t"
+         "add $3, %0"
+    : "=r" (fd)
+    : "r" (fd));
 
-	free_tokens(paths);
-	return (0);
+    if (argc == 2)
+    {
+        fd = open(argv[1], O_RDONLY);
+        if (fd == -1)
+        {
+            if (errno == EACCES)
+                exit(126);
+            if (errno == ENOENT)
+            {
+                _eputs(argv[0]);
+                _eputs(": 0: Can't open ");
+                _eputs(argv[1]);
+                _eputschar('\n');
+                _eputschar(BUF_FLUSH);
+                exit(127);
+            }
+            return (EXIT_FAILURE);
+        }
+        info->readfd = fd;
+    }
+    populate_env_list(info);
+    read_history(info);
+    hsh(info, argv);
+    return (EXIT_SUCCESS);
 }
