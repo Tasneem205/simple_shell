@@ -30,7 +30,7 @@
 #define CONVERT_UNSIGNED 2
 
 /* if using system get line */
-#define USE_GET_LINE 0
+#define USE_GETLINE 0
 #define USE_STRTOK 0
 
 #define HIST_FILE ".simple_shell_history"
@@ -44,11 +44,11 @@ extern char **environ;
  * @str: a string
  * @next: pointer to the next node
  */
-typedef struct listStr
+typedef struct liststr
 {
  int num;
  char *str;
- struct listStr *next;
+ struct liststr *next;
 } list_t;
 /*
  * struct passInfo - contains pseudocode arguments
@@ -95,7 +95,7 @@ typedef struct passInfo
 
 #define INFO_INIT \
 {NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
- 0, 0, 0}
+	0, 0, 0}
 
 /*
  * struct builtin - builtin  string
@@ -124,9 +124,9 @@ int loophsh(char **);
 
 /* err_string_functions.c */
 void _eputs(char *);
-int _eputschar(char);
-int _putfd(char, int);
-int _putsfd(char *, int);
+int _eputchar(char);
+int _putfd(char c, int fd);
+int _putsfd(char *str, int fd);
 
 /* string_functions.c */
 int _strlen(char *);

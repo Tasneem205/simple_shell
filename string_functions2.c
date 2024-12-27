@@ -1,11 +1,11 @@
 #include "main.h"
 
-/*
- * _strcpy - copy string
- * @dest: destination
- * @src: source string
+/**
+ * _strcpy - copies a string
+ * @dest: the destination
+ * @src: the source
  *
- * Return: the destination
+ * Return: pointer to destination
  */
 char *_strcpy(char *dest, char *src)
 {
@@ -18,51 +18,58 @@ char *_strcpy(char *dest, char *src)
         dest[i] = src[i];
         i++;
     }
+    dest[i] = 0;
     return (dest);
 }
 
-/*
- * _strdup - duplicate string
- * @str: string to be duplicated
+/**
+ * _strdup - duplicates a string
+ * @str: the string to duplicate
  *
- * Return: pointer to the duplicate
+ * Return: pointer to the duplicated string
  */
 char *_strdup(const char *str)
 {
-    int len = 0;
+    int length = 0;
     char *ret;
 
     if (str == NULL)
         return (NULL);
     while (*str++)
-        len++;
-    ret = malloc(sizeof(char) * (len + 1));
+        length++;
+    ret = malloc(sizeof(char) * (length + 1));
     if (!ret)
         return (NULL);
-    for (len++; len--;)
-        ret[len] = *--str;
+    for (length++; length--;)
+        ret[length] = *--str;
     return (ret);
 }
 
 /**
- * _puts - prints a given string followed by a new line
- * @s: string to print
+ *_puts - prints an input string
+ *@str: the string to be printed
+ *
+ * Return: Nothing
  */
-void _puts(char *s)
+void _puts(char *str)
 {
-    int i;
+    int i = 0;
 
-    if (!s)
+    if (!str)
         return;
-    for (i = 0; s[i] != '\0'; i++)
-        putchar(s[i]);
+    while (str[i] != '\0')
+    {
+        _putchar(str[i]);
+        i++;
+    }
 }
 
-/*
- * _putchar - prints character to stdout
- * @c: the char
+/**
+ * _putchar - writes the character c to stdout
+ * @c: The character to print
  *
- * Return: 1 if true;
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
  */
 int _putchar(char c)
 {
@@ -71,7 +78,7 @@ int _putchar(char c)
 
     if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
     {
-        write(1, buf, 1);
+        write(1, buf, i);
         i = 0;
     }
     if (c != BUF_FLUSH)
